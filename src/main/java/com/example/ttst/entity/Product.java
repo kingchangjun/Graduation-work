@@ -9,9 +9,9 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED) //JPA 기본 생성자.
 @AllArgsConstructor
-@Builder
+
 
 public class Product {
     @Id
@@ -23,5 +23,12 @@ public class Product {
     private String category;
     private double rating;
 
+    @Builder//JPA에서 ID필드를 무시하도록 설정.
+    public Product(String name, String category, double price, double rating) {
+        this.name = name;
+        this.category = category;
+        this.price = price;
+        this.rating = rating;
+    }
 
 }

@@ -28,5 +28,21 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public void addProduct(ProductDto productDto) {
+        Product product = Product.builder()
+                .name(productDto.getName())
+                .category(productDto.getCategory())
+                .price(productDto.getPrice())
+                .rating(productDto.getRating())
+                .build();
+        productRepository.save(product);
+    }
+
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
+    }
+
+
+
 
 }
