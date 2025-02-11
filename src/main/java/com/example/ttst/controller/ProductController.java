@@ -25,10 +25,17 @@ public class ProductController {
         productService.addProduct(productDto);
         return ResponseEntity.ok("Product added successfully");
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");
     }
+
+    @GetMapping("/compare")
+    public List<ProductDto> compareProducts(@RequestParam List<Long> ids) {
+        return productService.compareProducts(ids);
+    }
+
 
 }
