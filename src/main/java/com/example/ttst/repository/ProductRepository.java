@@ -14,6 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //필터링 검색 기능
     List<Product> findByCategoryAndPriceBetweenAndRatingGreaterThanEqual(String category, double minPrice, double maxPrice, double rating);
 
-    //여러 개의 상품을 ID 리스트로 가져오는 기능
-    List<Product> findAllById(List<Long> ids);
+
 }
