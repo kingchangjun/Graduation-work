@@ -15,9 +15,14 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    @GetMapping("/search")
+    /*@GetMapping("/search")<- 똑같은거 두 개 사용하면 안됨. 아래에 필터링 기능에 search있으니깐 이건 삭제.
     public List<ProductDto> search(@RequestParam String keyword) {
         return productService.getProducts(keyword);
+    }*/
+    @PostMapping("/add-multiple")
+    public ResponseEntity<String> addMultipleProducts(@RequestBody List<ProductDto> productDtoList) {
+        productService.addMultipleProducts(productDtoList);
+        return ResponseEntity.ok("Products added successfully");
     }
 
     @PostMapping("/add")
@@ -30,6 +35,20 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully");
+    }
+
+    @GetMapping("/search")
+    public List<ProductDto> filterProducts(
+            @RequestParam String keyword,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false, defaultValue = "0") double minPrice,
+            @RequestParam(required = false, defaultValue = "999999") double maxPrice,
+            @RequestParam(required = false, defaultValue = "0") double minRating) {
+
+        System.out.println("필터링 요청: keyword=" + keyword + ", category=" + category +
+                ", minPrice=" + minPrice + ", maxPrice=" + maxPrice + ", minRating=" + minRating);
+
+        return productService.filterProduct(keyword, category, minPrice, maxPrice, minRating);
     }
 
     @GetMapping("/compare")

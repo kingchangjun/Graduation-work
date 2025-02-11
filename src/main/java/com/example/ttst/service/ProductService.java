@@ -42,12 +42,33 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public List<ProductDto> filterProduct(String keyword, String category, double minpPice, double maxPrice, double minRating) {
+    //상품 여러개 추가하는 기능.
+    public void addMultipleProducts(List<ProductDto> productDtoList) {
+        List<Product> products = productDtoList.stream()
+                .map(dto -> Product.builder()
+                        .name(dto.getName())
+                        .category(dto.getCategory())
+                        .price(dto.getPrice())
+                        .rating(dto.getRating())
+                        .build())
+                .collect(Collectors.toList());
 
-        //JPa 쿼리 실행 필터링 조건을 만족하는 상품 리스트 가져오기
-        List<Product> products = productRepository.findByCategoryAndPriceBetweenAndRatingGreaterThanEqual(category, minpPice, maxPrice, minRating);
+        productRepository.saveAll(products);
+    }
 
-        //Product 객체 리스트를 ProductDto 리스트로 변환.
+
+    public List<ProductDto> filterProduct(String keyword, String category, double minPrice, double maxPrice, double minRating) {
+        //필터링 조건 확인
+        System.out.println("서비스에서 받은 필터링 조건: category=" + category + ", minPrice=" + minPrice + ", maxPrice=" + maxPrice + ", minRating=" + minRating);
+
+        List<Product> products = productRepository.findByCategoryAndPriceBetweenAndRatingGreaterThanEqual(
+                category, minPrice, maxPrice, minRating);
+
+        //검색된 결과 로그 출력
+        for (Product p : products) {
+            System.out.println("검색 결과: " + p.getName() + ", 가격: " + p.getPrice());
+        }
+
         return products.stream()
                 .map(product -> ProductDto.builder()
                         .id((long) product.getId())
@@ -58,12 +79,10 @@ public class ProductService {
                         .build())
                 .collect(Collectors.toList());
     }
-    public List<ProductDto> compareProducts(List<Long> productIds) {
 
-        //JPA를 사용해서 상품 ID 리스트에 해당하는 상품들을 가져오기
+    public List<ProductDto> compareProducts(List<Long> productIds) {
         List<Product> products = productRepository.findAllById(productIds);
 
-        //Product를 ProductDto 변환
         return products.stream()
                 .map(product -> ProductDto.builder()
                         .id((long) product.getId())
@@ -74,6 +93,7 @@ public class ProductService {
                         .build())
                 .collect(Collectors.toList());
     }
+
 
 
 
