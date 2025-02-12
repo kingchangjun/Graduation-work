@@ -38,18 +38,16 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public List<ProductDto> filterProducts(
-            @RequestParam String keyword,
+    public List<ProductDto> searchProducts(
+            @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String category,
-            @RequestParam(required = false, defaultValue = "0") double minPrice,
-            @RequestParam(required = false, defaultValue = "999999") double maxPrice,
-            @RequestParam(required = false, defaultValue = "0") double minRating) {
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Double minRating) {
 
-        System.out.println("필터링 요청: keyword=" + keyword + ", category=" + category +
-                ", minPrice=" + minPrice + ", maxPrice=" + maxPrice + ", minRating=" + minRating);
-
-        return productService.filterProduct(keyword, category, minPrice, maxPrice, minRating);
+        return productService.searchProducts(keyword, category, minPrice, maxPrice, minRating);
     }
+
 
     @GetMapping("/compare")
     public List<ProductDto> compareProducts(@RequestParam List<Long> ids) {
