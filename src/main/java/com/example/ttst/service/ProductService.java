@@ -57,17 +57,16 @@ public class ProductService {
     }
 
 
-    public List<ProductDto> filterProduct(String keyword, String category, double minPrice, double maxPrice, double minRating) {
-        //필터링 조건 확인
-        System.out.println("서비스에서 받은 필터링 조건: category=" + category + ", minPrice=" + minPrice + ", maxPrice=" + maxPrice + ", minRating=" + minRating);
+    public List<ProductDto> searchProducts(String keyword, String category, Double minPrice, Double maxPrice, Double minRating) {
+        // 기본값 적용 (NULL이면 기본값 사용)
+        if (minPrice == null) minPrice = 0.0;
+        if (maxPrice == null) maxPrice = Double.MAX_VALUE;
+        if (minRating == null) minRating = 0.0;
 
-        List<Product> products = productRepository.findByCategoryAndPriceBetweenAndRatingGreaterThanEqual(
-                category, minPrice, maxPrice, minRating);
+        System.out.println(" 검색 요청: keyword=" + keyword + ", category=" + category +
+                ", minPrice=" + minPrice + ", maxPrice=" + maxPrice + ", minRating=" + minRating);
 
-        //검색된 결과 로그 출력
-        for (Product p : products) {
-            System.out.println("검색 결과: " + p.getName() + ", 가격: " + p.getPrice());
-        }
+        List<Product> products = productRepository.searchWithFilters(keyword, category, minPrice, maxPrice, minRating);
 
         return products.stream()
                 .map(product -> ProductDto.builder()
