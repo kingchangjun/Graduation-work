@@ -82,7 +82,7 @@ public class ProductService {
     public List<ProductDto> compareProducts(List<Long> productIds) {
         List<Product> products = productRepository.findAllById(productIds);
 
-        // 🟢 비교 요청이 들어오면 로그 출력
+        // 비교 요청이 들어오면 로그 출력
         System.out.println(" 비교할 제품 ID 목록: " + productIds);
 
         return products.stream()

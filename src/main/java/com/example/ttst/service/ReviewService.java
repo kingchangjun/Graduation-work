@@ -17,7 +17,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
 
-    // 🔹 리뷰 추가 기능
+    // 리뷰 추가 기능
     public void addReview(Long productId, String comment, double rating) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -28,13 +28,13 @@ public class ReviewService {
                 .rating(rating)
                 .build();
 
-        reviewRepository.save(review); // 🔹 리뷰 저장
+        reviewRepository.save(review); //  리뷰 저장
         product.getReviews().add(review);
-        product.updateRating(); // 🔹 평균 평점 업데이트
+        product.updateRating(); // 평균 평점 업데이트
         productRepository.save(product);
     }
 
-    // 🔹 특정 상품의 모든 리뷰 조회
+    //  특정 상품의 모든 리뷰 조회
     public List<ReviewDto> getReviews(Long productId) {
         List<Review> reviews = reviewRepository.findByProductId(productId);
 
@@ -48,7 +48,7 @@ public class ReviewService {
     }
 
 
-    // 🔹 리뷰 삭제 기능
+    // 리뷰 삭제 기능
     public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
