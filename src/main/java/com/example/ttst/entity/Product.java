@@ -1,10 +1,10 @@
 package com.example.ttst.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,5 +31,22 @@ public class Product {
         this.price = price;
         this.rating = rating;
     }
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
+
+
+    public void updateRating(){
+        if (reviews.isEmpty()) {
+            this.rating = 0.0;
+        } else {
+            double avgRating = reviews.stream()
+                    .mapToDouble(Review::getRating)
+                    .average()
+                    .orElse(0.0);
+            this.rating = Math.round(avgRating * 10.0) / 10.0; // 소수점 한 자리 반올림
+        }
+    }
+
 
 }

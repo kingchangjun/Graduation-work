@@ -82,16 +82,23 @@ public class ProductService {
     public List<ProductDto> compareProducts(List<Long> productIds) {
         List<Product> products = productRepository.findAllById(productIds);
 
+        // 🟢 비교 요청이 들어오면 로그 출력
+        System.out.println(" 비교할 제품 ID 목록: " + productIds);
+
         return products.stream()
-                .map(product -> ProductDto.builder()
-                        .id((long) product.getId())
-                        .name(product.getName())
-                        .category(product.getCategory())
-                        .price(product.getPrice())
-                        .rating(product.getRating())
-                        .build())
+                .map(product -> {
+                    System.out.println("비교 제품: " + product.getName() + " (가격: " + product.getPrice() + ")");
+                    return ProductDto.builder()
+                            .id((long) product.getId())
+                            .name(product.getName())
+                            .category(product.getCategory())
+                            .price(product.getPrice())
+                            .rating(product.getRating())
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
+
 
 
 
