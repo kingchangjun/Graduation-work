@@ -56,7 +56,7 @@ public class ReviewService {
         Product product = review.getProduct();
         reviewRepository.delete(review);
 
-        product.updateRating(); // 🔹 리뷰 삭제 후 평점 업데이트
+        product.updateRating(); //  리뷰 삭제 후 평점 업데이트
         productRepository.save(product);
     }
 }
