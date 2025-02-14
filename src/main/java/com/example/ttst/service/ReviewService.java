@@ -29,12 +29,12 @@ public class ReviewService {
 
         String reviewCode = productId + "_" + memberId;
 
-        // 🔹 기존 리뷰가 있는지 확인 후 예외 발생
+        //  기존 리뷰가 있는지 확인 후 예외 발생
         if (reviewRepository.findByReviewCode(reviewCode).isPresent()) {
             throw new RuntimeException("이미 작성한 리뷰가 있습니다. 수정하려면 리뷰 수정을 이용해 주세요.");
         }
 
-        // 🔹 새로운 리뷰 생성
+        // 새로운 리뷰 생성
         Review review = Review.builder()
                 .reviewCode(reviewCode)
                 .member(member)
