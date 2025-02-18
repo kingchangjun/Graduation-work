@@ -16,17 +16,37 @@ import java.util.List;
 public class CartController {
     private final CartService cartService;
 
-    // 장바구니에 상품 추가
+    //  장바구니 추가
     @PostMapping("/add")
-    public ResponseEntity<String> addToCart(@RequestBody CartRequest cartRequest) {
-        cartService.addToCart(cartRequest.getMemberId(), cartRequest.getProductId(), cartRequest.getQuantity());
-        return ResponseEntity.ok("Product added to cart successfully!");
+    public ResponseEntity<CartItemDto> addToCart(@RequestBody CartRequest request) {
+        CartItemDto cartItem = cartService.addToCart(request.getMemberId(), request.getProductId(), request.getQuantity());
+        return ResponseEntity.ok(cartItem);
     }
 
-    //  장바구니 목록 조회
+    // 상품 수량 업데이트
+    @PutMapping("/update")
+    public ResponseEntity<CartItemDto> updateCart(@RequestBody CartRequest request) {
+        CartItemDto cartItem = cartService.updateCartItem(request.getMemberId(), request.getProductId(), request.getQuantity());
+        return ResponseEntity.ok(cartItem);
+    }
+
+    // 장바구니 조회
     @GetMapping("/{memberId}")
-    public List<CartItemDto> getCart(@PathVariable Long memberId) {
-        return cartService.getCart(memberId);
+    public ResponseEntity<List<CartItemDto>> getCart(@PathVariable Long memberId) {
+        return ResponseEntity.ok(cartService.getCart(memberId));
+    }
+
+    // 장바구니 총 가격 조회
+    @GetMapping("/total/{memberId}")
+    public ResponseEntity<Double> getTotalPrice(@PathVariable Long memberId) {
+        return ResponseEntity.ok(cartService.getTotalPrice(memberId));
+    }
+
+    // 장바구니 비우기
+    @DeleteMapping("/clear/{memberId}")
+    public ResponseEntity<String> clearCart(@PathVariable Long memberId) {
+        cartService.clearCart(memberId);
+        return ResponseEntity.ok("Cart cleared successfully!");
     }
 
     // 특정 상품 삭제
@@ -36,10 +56,4 @@ public class CartController {
         return ResponseEntity.ok("Product removed from cart successfully!");
     }
 
-    // 장바구니 비우기
-    @DeleteMapping("/clear/{memberId}")
-    public ResponseEntity<String> clearCart(@PathVariable Long memberId) {
-        cartService.clearCart(memberId);
-        return ResponseEntity.ok("Cart cleared successfully!");
-    }
 }

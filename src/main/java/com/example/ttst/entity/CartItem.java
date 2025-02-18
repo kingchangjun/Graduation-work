@@ -1,6 +1,7 @@
 package com.example.ttst.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)  //
+    @JsonIgnore
     private Member member;  // Member와 연결
 
     @ManyToOne
@@ -24,5 +26,10 @@ public class CartItem {
     private Product product;
 
     private int quantity;
+
+    public double getTotalPrice(){
+        return product.getPrice() * quantity;
+    }
+
 }
 
