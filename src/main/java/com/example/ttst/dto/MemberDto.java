@@ -21,4 +21,5 @@ public class MemberDto {
                 .build();
 
     }
+
 }
