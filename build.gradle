@@ -57,7 +57,7 @@ dependencies {
 	// 비밀번호 암호화 (BCrypt)
 	implementation 'org.springframework.security:spring-security-crypto'
 
-
+	implementation 'org.json:json:20240303'
 }
 
 tasks.named('test') {
