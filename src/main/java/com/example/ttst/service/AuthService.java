@@ -8,6 +8,7 @@ import com.example.ttst.repository.MemberRepository;
 import com.example.ttst.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,22 +18,8 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    // 회원가입
-   /* public String signup(SignupRequest request) {
-        if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("이미 존재하는 이메일입니다.");
-        }
 
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-        Member member = Member.builder()
-                .email(request.getEmail())
-                .name(request.getName())
-                .password(encodedPassword)
-                .build();
 
-        memberRepository.save(member);
-        return "회원가입 성공!";
-    }*/
     public String signup(SignupRequest request) {
         System.out.println("회원가입 요청 받음: " + request.getEmail());
 
@@ -42,16 +29,20 @@ public class AuthService {
         }
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
+
         Member member = Member.builder()
                 .email(request.getEmail())
-                .name(request.getName())
                 .password(encodedPassword)
+                .name(request.getName())
+                .gender(request.getGender())
+                .birthDate(request.getBirthDate()) // LocalDate로 생성
                 .build();
 
         memberRepository.save(member);
         System.out.println("회원가입 성공!");
         return "회원가입 성공!";
     }
+
 
     // 로그인
     public String login(LoginRequest request) {
@@ -70,5 +61,21 @@ public class AuthService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         return MemberDto.fromEntity(member);
+    }
+
+    // 아이디 찾기: 이메일로 아이디 반환
+    public String findUserIdByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .map(Member::getEmail)
+                .orElseThrow(() -> new RuntimeException("해당 이메일로 가입된 사용자가 없습니다."));
+    }
+
+    // 비밀번호 초기화
+    public void resetPassword(String name, String email, String newPassword) {
+        Member member = memberRepository.findByNameAndEmail(name, email)
+                .orElseThrow(() -> new RuntimeException("일치하는 사용자 정보가 없습니다."));
+
+        member.setPassword(passwordEncoder.encode(newPassword));
+        memberRepository.save(member);
     }
 }
