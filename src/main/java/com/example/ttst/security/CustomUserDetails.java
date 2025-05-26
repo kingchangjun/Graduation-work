@@ -1,12 +1,16 @@
 package com.example.ttst.security;
 
+import com.example.ttst.dto.MemberDto;
 import com.example.ttst.entity.Member;
 import lombok.Getter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Collection;
 import java.util.Collections;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @Getter
 public class CustomUserDetails implements UserDetails {
@@ -27,6 +31,11 @@ public class CustomUserDetails implements UserDetails {
         return member.getPassword();
     }
 
+    public Member getMember() {
+        return member;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList(); // 권한 없음
@@ -39,4 +48,7 @@ public class CustomUserDetails implements UserDetails {
     @Override public boolean isCredentialsNonExpired() { return true; }
 
     @Override public boolean isEnabled() { return true; }
+
+
+
 }

@@ -36,6 +36,11 @@ public class Member {
     @Column(nullable = false)
     private LocalDate birthDate;
 
+    @Column(nullable = false)
+    private String phoneNumber;
+
+    @Column(nullable = false)
+    private String address;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
