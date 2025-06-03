@@ -4,13 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
-import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
 @Getter
@@ -34,6 +30,17 @@ public class Member {
     @JsonIgnore //응답 시 비밀번호 제외
     private String password;
 
+    @Column(nullable = false)
+    private String gender; // "MALE" or "FEMALE"
+
+    @Column(nullable = false)
+    private LocalDate birthDate;
+
+    @Column(nullable = false)
+    private String phoneNumber;
+
+    @Column(nullable = false)
+    private String address;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

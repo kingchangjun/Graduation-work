@@ -1,5 +1,6 @@
 package com.example.ttst.service;
 
+import com.example.ttst.dto.MemberDto;
 import com.example.ttst.entity.Member;
 import com.example.ttst.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,4 +32,29 @@ public class MemberService implements UserDetailsService {
                 .roles("USER")
                 .build();
     }
+
+    public MemberDto getMemberDto(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        return MemberDto.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .birthDate(member.getBirthDate())
+                .address(member.getAddress())
+                .build();
+    }
+
+    public void updateMemberInfo(String email, MemberDto dto) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+
+        member.setName(dto.getName());
+        member.setPhoneNumber(dto.getPhoneNumber());
+        member.setBirthDate(dto.getBirthDate());
+        member.setAddress(dto.getAddress());
+
+        memberRepository.save(member);
+    }
+
 }

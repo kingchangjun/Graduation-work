@@ -35,4 +35,20 @@ public class AuthController {
     public ResponseEntity<MemberDto> getUser(@AuthenticationPrincipal MemberDetails memberDetails) {
         return ResponseEntity.ok(MemberDto.fromEntity(memberDetails.getMember()));
     }
+
+    // 아이디 찾기
+    @GetMapping("/find-id")
+    public ResponseEntity<String> findUserId(@RequestParam String email) {
+        String userId = authService.findUserIdByEmail(email);
+        return ResponseEntity.ok("회원님의 아이디(이메일): " + userId);
+    }
+
+    //  비밀번호 초기화
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestParam String name,
+                                                @RequestParam String email,
+                                                @RequestParam String newPassword) {
+        authService.resetPassword(name, email, newPassword);
+        return ResponseEntity.ok("비밀번호가 재설정되었습니다.");
+    }
 }
